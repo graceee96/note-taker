@@ -19,4 +19,5 @@ app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, 'public/notes.
 //HTML route - 'GET *' should return 'index.html' file
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public/index.html')));
 
+//listen method
 app.listen(PORT, () => console.log(`App listening at http://localhost:${PORT}`));

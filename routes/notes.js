@@ -23,15 +23,13 @@ notes.post('/', (req, res) => {
             note_id: uid(),
         }
 
-        const noteString = JSON.stringify(newNote);
-
         fs.readFile('./db/db.json', 'utf8', (err, data) => {
             if (err) {
                 console.log(err);
             } else {
                 const parsedNotes = JSON.parse(data);
 
-                parsedNotes.push(noteString);
+                parsedNotes.push(newNote);
 
                 fs.writeFile('./db/db.json', JSON.stringify(parsedNotes, null, 4), (err) => err ? console.log (err) : console.log(`New note added!`))
             }

@@ -7,14 +7,14 @@ const path = require('path');
 notes.get('/', (req, res) => {
     console.info(`${req.method} request received for notes`);
     fs.readFile(path.join(__dirname, '../db/db.json'), 'utf8', (err, data) => {
-        console.log(data);
+        // console.log(data);
         res.json(JSON.parse(data))});
 })
 
 //'POST /api/notes' receive a new note to save on request body + add to 'db.json' file + return the new note to the client + give each note a unique id when it's saved (npm packages?)
 notes.post('/', (req, res) => {
     console.info(`${req.method} request received to add a note`);
-    console.log (req.body);
+    // console.log (req.body);
 
     const { title, text } = req.body;
     const uid = new shortUniqueId({ length: 8 });
@@ -41,5 +41,11 @@ notes.post('/', (req, res) => {
         console.log('Error in adding tip')
     }
 });
+
+//'DELETE /api/notes/:id' - read all notes in db.json, remove note with id property, rewrite notes to db.json
+notes.delete('/:id', (req, res) => {
+    console.info(`${req.method} request received to delete note`);
+    
+})
 
 module.exports = notes;

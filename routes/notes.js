@@ -16,7 +16,7 @@ notes.get('/', (req, res) => {
     });
 });
 
-//'GET /api/notes/:id' return specific note
+//'GET /api/notes/:id' return specific note ***
 notes.get('/:id', (req, res) => {
     const requestedNoteID = req.params.id;
     
@@ -66,27 +66,25 @@ notes.post('/', (req, res) => {
     }
 });
 
-//'DELETE /api/notes/:id' - read all notes in db.json, remove note with id property, rewrite notes to db.json
+//'DELETE /api/notes/:id' - read all notes in db.json, remove note with id property, rewrite notes to db.json ***
 notes.delete('/:id', (req, res) => {
     console.info(`${req.method} request received to delete note`);
     const requestedNotesID = req.params.id;
+    console.log(requestedNotesID)
 
     fs.readFile(path.join(__dirname, '../db/db.json'), 'utf8', (err, data) => {
         if (err) {
             console.log(err);
         } else {
-            const parsedNotes = JSON.parse(data);
+            let parsedNotes = JSON.parse(data);
 
-            for (let i = 0; i < parsedNotes.length; i++) {
-                if (requestedNotesID === parsedNotes[i].note_id) {
-                    return parsedNotes.splice([i], 1);
-                }
-            }
+            const filteredNotes = parsedNotes.filter(note => note.note_id != requestedNotesID)
+            
+            console.log(parsedNotes);
+            fs.writeFile("./db/db.json", JSON.stringify(filteredNotes, null, 4), (err) => err ? console.log (err) : console.log(`Note ${requestedNotesID} removed!`));
 
-            fs.writeFile(path.join(__dirname, '../db/db.json'), JSON.stringify(parsedNotes, null, 4), (err) => err ? console.log (err) : console.log(`Note ${requestedNotesID} removed!`));
-
-            return res.json(parsedNotes);
-        };
+            return res.json(filteredNotes);
+        }
     });
 })
 
